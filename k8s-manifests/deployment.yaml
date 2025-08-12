@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kairaprjkt-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kairaprjkt
+  template:
+    metadata:
+      labels:
+        app: kairaprjkt
+    spec:
+      containers:
+        - name: kairaprjkt
+          image: frintzy2024/kairaprjkt:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: "kairaprjkt.settings"
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secrets
+                  key: aws_access_key_id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-secrets
+                  key: aws_secret_access_key
